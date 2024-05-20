@@ -1,61 +1,73 @@
-playGame()
+const text = document.querySelector("#text");
+const humanScoreText = document.querySelector("#your-score");
+const computerScoreText = document.querySelector("#computer-score");
+
+playGame();
 
 function playGame() {
-    let humanScore = 0
-    let computerScore = 0
+    let humanScore = 0;
+    let computerScore = 0;
 
-    for (let i = 0; i < 5; i++) {
-        let winner = playRound(getHumanChoice(), getComputerChoice())
-        if (winner === 1) {
-            humanScore++
-        } else if (winner === 2) {
-            computerScore++
+    const btns = document.querySelector("#btns");
+
+    btns.addEventListener("click", (e) => {
+        let result = 0;
+        const targetId = e.target.id;
+
+        if (targetId === "rock") {
+            result = playRound("Rock", getComputerChoice());
+        } else if (targetId === "paper") {
+            result = playRound("Paper", getComputerChoice());
+        } else if (targetId === "scissors") {
+            result = playRound("Scissors", getComputerChoice());
         }
-    }
 
-    console.log(`Your wins: ${humanScore}\nComputer wins: ${computerScore}`)
+        // Reset game state internally and visually so a new game starts on next button press
+        if (humanScore === 5 || computerScore === 5) {
+            humanScoreText.textContent = "Your score: 0";
+            computerScoreText.textContent = "Computer score: 0";
+            text.style.color = "black";
+            humanScore = 0;
+            computerScore = 0;
+        }
 
-    if (humanScore > computerScore) {
-        console.log('You won the game!')
-    } else if (humanScore < computerScore) {
-        console.log('Computer won the game!')
-    } else {
-        console.log('The game ends in a draw!')
-    }
+        if (result === 1) {
+            humanScoreText.textContent = `Your score: ${++humanScore}`;
+        } else if (result === 2) {
+            computerScoreText.textContent = `Computer score: ${++computerScore}`;
+        }
+
+        if (humanScore === 5) {
+            text.textContent = "You won the game!";
+            text.style.color = "green";
+        } else if (computerScore === 5) {
+            text.textContent = "Computer won the game.";
+            text.style.color = "red";
+        }
+    });
 }
 
 function playRound(humanChoice, computerChoice) {
-    humanChoice = humanChoice.charAt(0).toUpperCase() + humanChoice.slice(1).toLowerCase()
-    computerChoice = computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1).toLowerCase()
-
     if (humanChoice === computerChoice) {
-        console.log('It\'s a draw!')
-        return 0
-    } else if (humanChoice === 'Rock' && computerChoice === 'Scissors' ||
-               humanChoice === 'Paper' && computerChoice === 'Rock' ||
-               humanChoice === 'Scissors' && computerChoice === 'Paper') {
-        console.log(`You win! ${humanChoice} beats ${computerChoice}.`)
-        return 1
+        text.textContent = "It's a draw!";
+        return 0;
+    } else if (humanChoice === "Rock" && computerChoice === "Scissors" ||
+               humanChoice === "Paper" && computerChoice === "Rock" ||
+               humanChoice === "Scissors" && computerChoice === "Paper") {
+        text.textContent = `You win! ${humanChoice} beats ${computerChoice}.`;
+        return 1;
     } else {
-        console.log(`You lose! ${computerChoice} beats ${humanChoice}.`)
-        return 2
+        text.textContent = `You lose! ${computerChoice} beats ${humanChoice}.`;
+        return 2;
     }
-}
-
-function getHumanChoice() {
-    let choice = ''
-    while (!(choice === 'rock' || choice === 'paper' || choice === 'scissors')) {
-        choice = prompt('Choose between rock, paper, or scissors').toLowerCase().trim()
-    }
-    return choice
 }
 
 function getComputerChoice() {
-    let choice = Math.floor(Math.random() * 3)
+    let choice = Math.floor(Math.random() * 3);
     if (choice === 0) {
-        return 'rock'
+        return "Rock";
     } else if (choice === 1) {
-        return 'paper'
+        return "Paper";
     }
-    return 'scissors'
+    return "Scissors";
 }
