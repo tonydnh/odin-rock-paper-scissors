@@ -1,3 +1,10 @@
+function getHumanChoice() {
+    let choice = ''
+    while (!(choice === 'rock' || choice === 'paper' || choice === 'scissors')) {
+        choice = prompt('Choose between rock, paper, or scissors')
+    }
+    return choice
+}
 
 function getComputerChoice() {
     let choice = Math.floor(Math.random() * 3)
