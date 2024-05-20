@@ -1,3 +1,6 @@
+let humanScore = 0
+let computerScore = 0
+
 function getHumanChoice() {
     let choice = ''
     while (!(choice === 'rock' || choice === 'paper' || choice === 'scissors')) {
